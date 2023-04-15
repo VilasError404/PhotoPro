@@ -23,8 +23,7 @@ A Telegram bot for photo editing using various filters and effects.
 
 2. Install the dependencies by running `pip install -r requirements.txt`.
 
-Create a `config.ini` file in the same directory as the Python file with the following contents:
-
+Change Configuration Settings in config.ini
 ```ini
 [@Vilas_Photography]
 api_id = your-api-id
