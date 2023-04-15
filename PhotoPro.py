@@ -43,8 +43,6 @@ msg = (
   f"- /cartoonifyphoto - **To make cartoon of Photo**.\n\n"
   f"- /colorcorrection - **To correct color of Photo.**\n\n")
 
-DEMO_PHOTO = "https://serving.photos.photobox.com/05766395a96ca242e37d20efb8d359d6c918a2ce488f1a799eb929656232fdfd0bf01a08.jpg"
-
 
 @app.on_message(filters.command("removebackground"))
 async def removebackground(bot, message):
