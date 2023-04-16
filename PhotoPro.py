@@ -1,4 +1,7 @@
+import csv
+import json
 import os
+import random
 import requests
 from pyrogram import Client, filters
 import time
@@ -14,7 +17,7 @@ api_id = config['@Vilas_Photography']['api_id']
 api_hash = config['@Vilas_Photography']['api_hash']
 bot_token = config['@Vilas_Photography']['token']
 COTOUT_KEY =  config['@Vilas_Photography']['cotout_key']
-
+vsource = config['@Vilas_Photography']['referral']
 
 app = Client(
   "PhotoPro",
@@ -42,6 +45,8 @@ msg = (
   f"- /colorizephoto - **To colorize Photo.**\n\n"
   f"- /cartoonifyphoto - **To make cartoon of Photo**.\n\n"
   f"- /colorcorrection - **To correct color of Photo.**\n\n")
+
+DEMO_PHOTO = "https://serving.photos.photobox.com/05766395a96ca242e37d20efb8d359d6c918a2ce488f1a799eb929656232fdfd0bf01a08.jpg"
 
 
 @app.on_message(filters.command("removebackground"))
@@ -231,9 +236,75 @@ async def process_photo(bot, message):
   await bot.send_message(message.chat.id, msg)
 
 
+@app.on_message(filters.command("edit"))
+async def process_photo(bot, message):
+    await bot.send_message(message.chat.id,"See what this Bot can do...")
+    await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/6.7b20e0d.jpg",caption="- /colorcorrection - **To correct color of Photo.**")
+    await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/home5.567ef41.jpeg",caption="- /facecut - **To Cut the face from photo.**")
+    await bot.send_photo(message.chat.id,photo="https://hotpot.ai/images/site/ai/colorizer/teaser.jpg",caption="- /colorizephoto - **To colorize Photo.**")
+    await bot.send_photo(message.chat.id,photo="https://compote.slate.com/images/e96d086d-e56f-40f6-8009-daf0cd363754.jpeg?crop=1200%2C800%2Cx0%2Cy0",caption="- /cartoonifyphoto - **To make cartoon of Photo**.")
+    await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/home1.7627841.jpeg",caption="- /removebackground - **To Remove Background of Photo.**")
+    await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/home2.5adc4ce.jpeg",caption="- /enhancephoto - **To enhance Photo.** (Recommended to use this feature before using all features)")
+
+
+@app.on_message(filters.command("credits"))
+async def credits(bot, message):
+    url = "https://www.cutout.pro/api/v1/mySubscription"
+    headers = {
+        'Accept': 'application/json',
+        'APIKEY': API_KEY
+    }
+
+    response = requests.request("GET", url, headers=headers)
+    data = json.loads(response.text)
+    mage_balance = data['data']['imageBalance']
+    await bot.send_message(message.chat.id, f"Your image balance is {mage_balance}")
 
 
 
+@app.on_message(filters.command("add"))
+async def add_credits(bot,message):
+    answer = await quiz.ask(message,"Enter your email")
+    email = answer.text
+    at_position = email.find("@")
+    username = email[:at_position]
+    domain = email[at_position:]
+    numbers = await quiz.ask(message,"Enter number of mails")
+    num_emails = int(numbers.text)
+    emails = []
+    for i in range(num_emails):
+        num_dots = random.randint(1, 3)
+  
+        dot_positions = sorted(random.sample(range(1, at_position-1), num_dots))
+    
+        new_username = username[:dot_positions[0]]
+        for j in range(num_dots-1):
+            new_username += "." + username[dot_positions[j]:dot_positions[j+1]]
+        new_username += "." + username[dot_positions[-1]:] if num_dots > 0 else username[dot_positions[-1]:]
+    
+        new_email = new_username + domain
+    
+        emails.append(new_email)
+
+    with open('emails.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        for email in emails:
+            writer.writerow([email])
+
+    with open('emails.csv', 'r')as f:
+        str_list = [row[0] for row in csv.reader(f)]
+        po = 0
+        for remails in str_list:
+            phone = remails
+            po += 1
+            params = {
+                       'email': phone,
+                        'password': 'asdfasdf',
+                            'vsource': vsource
+            }
+            url = "https://restapi.cutout.pro/user/registerByEmail2"
+            response = requests.get(url,params=params)
+            print(response)
     
 
 
