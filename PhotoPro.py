@@ -4,9 +4,7 @@ import os
 import random
 import requests
 from pyrogram import Client, filters
-import time
 from pyrocon import patch
-import datetime
 import configparser
 
 
@@ -58,14 +56,12 @@ async def removebackground(bot, message):
                           filter=(filters.photo))
   photo = answer.photo.file_id
   file_path = await app.download_media(photo)
-  now = datetime.datetime.now()
-  filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+  filename = message.chat.id
   response = requests.post(
     "https://www.cutout.pro/api/v1/matting?mattingType=6",
     files={"file": open(file_path, "rb")},
     headers={"APIKEY": API_KEY},
   )
-
   with open(f"{filename}.png", "wb") as out:
     out.write(response.content)
   await bot.send_photo(message.chat.id, open(f"{filename}.png", "rb"))
@@ -82,8 +78,8 @@ async def facecut(bot, message):
                           filter=(filters.photo))
   photo = answer.photo.file_id
   file_path = await app.download_media(photo)
-  now = datetime.datetime.now()
-  filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+  
+  filename = message.chat.id
   response = requests.post(
     "https://www.cutout.pro/api/v1/matting?mattingType=3",
     files={"file": open(file_path, "rb")},
@@ -105,8 +101,8 @@ async def enhancephoto(bot, message):
                           filter=(filters.photo))
   photo = answer.photo.file_id
   file_path = await app.download_media(photo)
-  now = datetime.datetime.now()
-  filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+  
+  filename = message.chat.id
   response = requests.post(
     "https://www.cutout.pro/api/v1/matting?mattingType=18",
     files={"file": open(file_path, "rb")},
@@ -175,8 +171,8 @@ async def start_cartoonifyphoto(bot, message):
     answer = await quiz.ask(message, "send a photo", filter=(filters.photo))
     photo = answer.photo.file_id
     file_path = await app.download_media(photo)
-    now = datetime.datetime.now()
-    filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+   
+    filename = message.chat.id
     response = requests.post(
       f"https://www.cutout.pro/api/v1/cartoonSelfie?cartoonType={cartoonType}",
       files={"file": open(file_path, "rb")},
@@ -196,8 +192,7 @@ async def colorcorrection(bot, message):
   answer = await quiz.ask(message,"Please send the photo for color correction:",filter=(filters.photo))
   photo = answer.photo.file_id
   file_path = await app.download_media(photo)
-  now = datetime.datetime.now()
-  filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+  filename = message.chat.id
   response = requests.post(
     "https://www.cutout.pro/api/v1/matting?mattingType=4",
     files={"file": open(file_path, "rb")},
@@ -220,8 +215,7 @@ async def process_photo(bot, message):
                           filter=(filters.photo))
   photo = answer.photo.file_id
   file_path = await app.download_media(photo)
-  now = datetime.datetime.now()
-  filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+  filename = message.chat.id
   response = requests.post(
     "https://www.cutout.pro/api/v1/matting?mattingType=19",
     files={"file": open(file_path, "rb")},
@@ -244,7 +238,6 @@ async def process_photo(bot, message):
     await bot.send_photo(message.chat.id,photo="https://hotpot.ai/images/site/ai/colorizer/teaser.jpg",caption="- /colorizephoto - **To colorize Photo.**")
     await bot.send_photo(message.chat.id,photo="https://compote.slate.com/images/e96d086d-e56f-40f6-8009-daf0cd363754.jpeg?crop=1200%2C800%2Cx0%2Cy0",caption="- /cartoonifyphoto - **To make cartoon of Photo**.")
     await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/home1.7627841.jpeg",caption="- /removebackground - **To Remove Background of Photo.**")
-    await bot.send_photo(message.chat.id,photo="https://d38b044pevnwc9.cloudfront.net/cutout-web/v2.3.65/img/home2.5adc4ce.jpeg",caption="- /enhancephoto - **To enhance Photo.** (Recommended to use this feature before using all features)")
 
 
 @app.on_message(filters.command("credits"))
