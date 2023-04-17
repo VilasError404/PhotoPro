@@ -29,7 +29,7 @@ quiz = patch(app, clear=True)
 API_KEY = COTOUT_KEY
 
 mess = """
-Hi {} {}! Welcome to our PhotoPro editing bot 📷!
+Hi {}! Welcome to our PhotoPro editing bot 📷!
 
 This bot is created by @Vilas_Photography to help you enhance your photos with various filters and effects..
 
@@ -305,7 +305,7 @@ async def add_credits(bot,message):
 async def start(bot, message):
   await bot.send_message(
     message.chat.id,
-    mess.format(message.chat.first_name, message.chat.last_name))
+    mess.format(message.chat.first_name))
 
 
 app.run()
